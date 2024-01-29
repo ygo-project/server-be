@@ -4,8 +4,11 @@
 
 <mapper namespace="com.ygo.server.api.service.dao.UserDAO">
 
-    <select id="selectNow" resultType="string">
-        select now()
+    <select id="selectUserID" resultType="int" parameterType="string">
+        SELECT
+            COUNT(*)
+        FROM user
+        WHERE id = #{id}
     </select>
 
 </mapper>

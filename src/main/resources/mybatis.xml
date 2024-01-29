@@ -11,9 +11,12 @@
 
     <typeAliases>
         <typeAlias type="java.lang.String" alias="string" />
+        <typeAlias type="java.lang.Integer" alias="int" />
         <typeAlias type="java.util.Map" alias="map" />
         <typeAlias type="java.util.List" alias="list" />
         <typeAlias type="java.util.HashMap" alias="hashMap" />
+
+        <typeAlias type="com.ygo.server.api.service.vo.UserVO" alias="user" />
     </typeAliases>
 
 </configuration>
