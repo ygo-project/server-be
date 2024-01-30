@@ -13,4 +13,10 @@ public class UserVO {
     private String name;
 
     private LocalDateTime created;
+
+    public boolean isValid() {
+        if (id == null || id.isEmpty()) return false;
+        if (password == null || password.isEmpty()) return false;
+        return true;
+    }
 }

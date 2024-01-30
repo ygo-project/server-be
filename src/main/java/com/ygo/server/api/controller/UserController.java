@@ -33,6 +33,18 @@ public class UserController {
 
         return ResponseEntity.ok().body("isExist");
     }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public ResponseEntity<Object> signup(@RequestBody UserVO userVo) {
+        if (!userVo.isValid()) return ResponseEntity.badRequest().body("아이디와 비밀번호는 필수 입력 값입니다.");
+        boolean isSignUpDone = userService.signUp(userVo);
+
+        if (isSignUpDone) {
+            return ResponseEntity.ok().body(userVo);
+        } else {
+            return ResponseEntity.badRequest().body("입력에 실패하였습니다. 잠시 후 다시 이용해주세요.");
+        }
+    }
     //PATCH
     //DELETE
 }
