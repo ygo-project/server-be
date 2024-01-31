@@ -4,11 +4,25 @@
 
 <mapper namespace="com.ygo.server.api.service.dao.UserDAO">
 
-    <select id="selectUserID" resultType="int" parameterType="string">
+    <select id="selectUserByID" resultType="user" parameterType="user">
         SELECT
-            COUNT(*)
+            id,
+            password,
+            name,
+            created
         FROM user
-        WHERE id = #{id}
+        WHERE id = #{userId}
+    </select>
+
+    <select id="selectUserByIDAndPassword" resultType="user" parameterType="user">
+        SELECT
+            id,
+            password,
+            name,
+            created
+        FROM user
+        WHERE id = #{userId}
+        AND password = #{userPw}
     </select>
 
     <insert id="insertUser" parameterType="user">

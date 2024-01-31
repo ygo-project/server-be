@@ -6,7 +6,8 @@ import com.ygo.server.api.service.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -17,8 +18,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isExistID(String id) {
-        int userCnt = userDAO.selectUserID(id);
-        return userCnt > 0;
+        return userDAO.selectUserByID(UserVO.builder().userId(id).build()).isPresent();
+    }
+
+    @Override
+    public UserVO getMatchedUser(UserVO reqVo) {
+        Optional<UserVO> selected = userDAO.selectUserByIDAndPassword(reqVo);
+        return selected.orElse(null);
+    }
+
+    @Override
+    public Optional<UserVO> login(UserVO reqVo) {
+        return userDAO.selectUserByID(reqVo);
     }
 
     @Override

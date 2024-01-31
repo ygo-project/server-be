@@ -8,15 +8,15 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class UserVO {
-    private String id;
-    private String password;
-    private String name;
+    private String userId;
+    private String userPw;
+    private String userNm;
 
     private LocalDateTime created;
 
     public boolean isValid() {
-        if (id == null || id.isEmpty()) return false;
-        if (password == null || password.isEmpty()) return false;
+        if (userId == null || userId.isEmpty()) return false;
+        if (userPw == null || userPw.isEmpty()) return false;
         return true;
     }
 }

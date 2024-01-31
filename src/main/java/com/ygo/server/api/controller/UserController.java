@@ -1,7 +1,10 @@
 package com.ygo.server.api.controller;
 
 import com.ygo.server.api.service.interfaces.UserService;
+import com.ygo.server.api.service.vo.TokenVO;
 import com.ygo.server.api.service.vo.UserVO;
+import com.ygo.server.constants.AuthConstants;
+import com.ygo.server.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +27,19 @@ public class UserController {
         return ResponseEntity.ok().body("생성 가능한 아이디입니다.");
     }
     //POST
-    @RequestMapping(value = "/validate", method = RequestMethod.POST) // 상태 변경이 없지만, 예외적으로 POST
-    public ResponseEntity<Object> validate(@RequestBody UserVO userVo) {
-//        boolean isExist = userService.isExistID(userVo);
-//        if (!isExist) {
-//            return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
-//        }
+    @RequestMapping(value = "/login", method = RequestMethod.POST) // 상태 변경이 없지만, 예외적으로 POST
+    public ResponseEntity<Object> login(@RequestBody UserVO userVo) {
+        UserVO user = userService.getMatchedUser(userVo);
+        if (user == null) {
+            return ResponseEntity.status(403).body("일치하는 정보가 존재하지 않습니다.");
+        }
 
-        return ResponseEntity.ok().body("isExist");
+        TokenVO result = TokenVO.builder()
+                .grantType(AuthConstants.TOKEN_TYPE)
+                .accessToken(TokenUtils.generateAccessToken(user))
+                .refreshToken(TokenUtils.generateRefreshToken(user))
+                .build();
+        return ResponseEntity.ok().body(result);
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
@@ -40,7 +48,15 @@ public class UserController {
         boolean isSignUpDone = userService.signUp(userVo);
 
         if (isSignUpDone) {
-            return ResponseEntity.ok().body(userVo);
+            UserVO user = userService.getMatchedUser(userVo);
+
+            TokenVO result = TokenVO.builder()
+                    .grantType(AuthConstants.TOKEN_TYPE)
+                    .accessToken(TokenUtils.generateAccessToken(user))
+                    .refreshToken(TokenUtils.generateRefreshToken(user))
+                    .build();
+
+            return ResponseEntity.ok().body(result);
         } else {
             return ResponseEntity.badRequest().body("입력에 실패하였습니다. 잠시 후 다시 이용해주세요.");
         }
