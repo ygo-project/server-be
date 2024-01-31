@@ -1,5 +1,6 @@
 package com.ygo.server.config.filter;
 
+import com.ygo.server.api.service.interfaces.UserService;
 import com.ygo.server.config.exception.BusinessExceptionHandler;
 import com.ygo.server.constants.AuthConstants;
 import com.ygo.server.constants.ErrorCode;
@@ -7,8 +8,10 @@ import com.ygo.server.utils.TokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.SignatureException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,7 +25,11 @@ import java.util.List;
 import java.util.HashMap;
 
 @Slf4j
+@RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
+    private final UserService userService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         // 1. 토큰이 필요하지 않은 API URL에 대해서 배열로 구성합니다.
@@ -66,9 +73,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                     // [STEP5] 사용자 아이디가 존재하는지 여부 체크
                     if (userId != null && !userId.equalsIgnoreCase("")) {
-
-                        // TODO: [STEP6] 실제 DB로 조회를 하여 유효한 사용자 인지 확인(인증)하는 부분이 들어가면 될것 같습니다.
-                        chain.doFilter(request, response);
+                        // [STEP6] 실제 DB로 조회를 하여 유효한 사용자 인지 확인(인증)
+                        if (userService.isExistID(userId)) chain.doFilter(request, response);
                     } else {
                         throw new BusinessExceptionHandler("TOKEN isn't userId", ErrorCode.BUSINESS_EXCEPTION_ERROR);
                     }

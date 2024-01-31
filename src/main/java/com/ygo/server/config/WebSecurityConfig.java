@@ -1,6 +1,8 @@
 package com.ygo.server.config;
 
+import com.ygo.server.api.service.interfaces.UserService;
 import com.ygo.server.config.filter.JwtAuthorizationFilter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +21,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Slf4j
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final UserService userService;
 
     /**
      * 1. 정적 자원(Resource)에 대해서 인증된 사용자의 접근에 대해 ‘인가’에 대한 설정을 담당하는 메서드이다.
@@ -49,7 +54,7 @@ public class WebSecurityConfig {
                 // [STEP3] 토큰을 활용하는 경우 모든 요청을 '인가'에 대해서 적용
                 .authorizeRequests(authz -> authz.anyRequest().permitAll())
                 // [STEP4] Spring Security JWT Filter Load
-                .addFilterBefore(new JwtAuthorizationFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(userService), BasicAuthenticationFilter.class)
                 // [STEP5] Session 기반의 인증기반을 사용하지 않고 JWT를 이용하여서 인증
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
