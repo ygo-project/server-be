@@ -9,4 +9,6 @@ public class TokenVO {
     private String grantType;
     private String accessToken;
     private String refreshToken;
+
+    private String auth;
 }

@@ -36,6 +36,7 @@ public class UserController {
 
         TokenVO result = TokenVO.builder()
                 .grantType(AuthConstants.TOKEN_TYPE)
+                .auth(user.getUserAuth())
                 .accessToken(TokenUtils.generateAccessToken(user))
                 .refreshToken(TokenUtils.generateRefreshToken(user))
                 .build();
@@ -52,6 +53,7 @@ public class UserController {
 
             TokenVO result = TokenVO.builder()
                     .grantType(AuthConstants.TOKEN_TYPE)
+                    .auth(user.getUserAuth())
                     .accessToken(TokenUtils.generateAccessToken(user))
                     .refreshToken(TokenUtils.generateRefreshToken(user))
                     .build();
