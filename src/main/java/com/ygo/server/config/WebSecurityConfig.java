@@ -1,6 +1,7 @@
 package com.ygo.server.config;
 
 import com.ygo.server.api.service.interfaces.UserService;
+import com.ygo.server.config.filter.ExceptionHandlerFilter;
 import com.ygo.server.config.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +56,7 @@ public class WebSecurityConfig {
                 .authorizeRequests(authz -> authz.anyRequest().permitAll())
                 // [STEP4] Spring Security JWT Filter Load
                 .addFilterBefore(new JwtAuthorizationFilter(userService), BasicAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthorizationFilter.class)
                 // [STEP5] Session 기반의 인증기반을 사용하지 않고 JWT를 이용하여서 인증
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

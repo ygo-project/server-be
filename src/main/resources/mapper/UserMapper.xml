@@ -6,12 +6,14 @@
 
     <select id="selectUserByID" resultType="user" parameterType="user">
         SELECT
-            id as userId,
-            password as userPw,
-            name as userNm,
-            created
-        FROM user
-        WHERE id = #{userId}
+            u.id as userId,
+            u.password as userPw,
+            u.name as userNm,
+            c.code_desc as userAuth
+        FROM user u, user_auth a, common_code c
+        WHERE u.id = a.id
+          AND a.auth = c.code
+          AND u.id = #{userId}
     </select>
 
     <select id="selectUserByIDAndPassword" resultType="user" parameterType="user">
@@ -22,9 +24,9 @@
             c.code_desc as userAuth
         FROM user u, user_auth a, common_code c
         WHERE u.id = a.id
-        AND a.auth = c.code
-        AND u.id = #{userId}
-        AND u.password = #{userPw}
+          AND a.auth = c.code
+          AND u.id = #{userId}
+          AND u.password = #{userPw}
     </select>
 
     <insert id="insertUser" parameterType="user">

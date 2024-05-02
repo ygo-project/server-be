@@ -75,24 +75,9 @@ public class TokenUtils {
      * @return boolean      : 유효한지 여부 반환
      */
     public static boolean isValidToken(String token) {
-        try {
             Claims claims = getClaimsFormToken(token);
 
-//            log.info("expireTime :" + claims.getExpiration());
-//            log.info("userId :" + claims.get("userId"));
-//            log.info("userNm :" + claims.get("userNm"));
-
             return true;
-        } catch (ExpiredJwtException exception) {
-            log.error("Token Expired");
-            return false;
-        } catch (JwtException exception) {
-            log.error("Token Tampered");
-            return false;
-        } catch (NullPointerException exception) {
-            log.error("Token is null");
-            return false;
-        }
     }
 
     /**

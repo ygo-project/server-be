@@ -2,16 +2,13 @@ package com.ygo.server.config.filter;
 
 import com.ygo.server.api.service.interfaces.UserService;
 import com.ygo.server.config.exception.BusinessExceptionHandler;
+import com.ygo.server.config.exception.TokenNotValidateException;
 import com.ygo.server.constants.AuthConstants;
 import com.ygo.server.constants.ErrorCode;
 import com.ygo.server.utils.TokenUtils;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -19,10 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.HashMap;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,6 +31,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         List<String> urls = Arrays.asList(
                 "/user/find/",
                 "/user/login",
+                "/user/refresh",
                 "/user/signup"
         );
 
@@ -87,50 +83,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             else {
                 throw new BusinessExceptionHandler("Token is null", ErrorCode.BUSINESS_EXCEPTION_ERROR);
             }
-        } catch (Exception e) {
-            // Token 내에 Exception이 발생 하였을 경우 => 클라이언트에 응답값을 반환하고 종료합니다.
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json");
-            PrintWriter printWriter = response.getWriter();
-            JSONObject jsonObject = jsonResponseWrapper(e);
-            printWriter.print(jsonObject);
-            printWriter.flush();
-            printWriter.close();
+        } catch (SecurityException | MalformedJwtException e) {
+            log.error("Invalid JWT Token", e);
+            throw new TokenNotValidateException("Invalid JWT Token", e);
+        } catch (ExpiredJwtException e) {
+            log.error("Expired JWT Token", e);
+            throw new TokenNotValidateException("Expired JWT Token", e);
+        } catch (UnsupportedJwtException e) {
+            log.error("Unsupported JWT Token", e);
+            throw new TokenNotValidateException("Unsupported JWT Token", e);
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty", e);
+            throw new TokenNotValidateException("JWT claims string is empty", e);
+        } catch (SignatureException e) {
+            log.error("JWT Token Not Allowed", e);
+            throw new TokenNotValidateException("JWT Token Not Allowed", e);
+        } catch (JwtException e) {
+            log.error("TOKEN Parsing JwtException", e);
+            throw new TokenNotValidateException("TOKEN Parsing JwtException", e);
         }
-    }
-
-    /**
-     * 토큰 관련 Exception 발생 시 예외 응답값 구성
-     * @param e Exception
-     * @return JSONObject
-     */
-    private JSONObject jsonResponseWrapper(Exception e) {
-
-        String resultMsg = "";
-        // JWT 토큰 만료
-        if (e instanceof ExpiredJwtException) {
-            resultMsg = "TOKEN Expired";
-        }
-        // JWT 허용된 토큰이 아님
-        else if (e instanceof SignatureException) {
-            resultMsg = "TOKEN SignatureException Login";
-        }
-        // JWT 토큰내에서 오류 발생 시
-        else if (e instanceof JwtException) {
-            resultMsg = "TOKEN Parsing JwtException";
-        }
-        // 이외 JTW 토큰내에서 오류 발생
-        else {
-            resultMsg = "OTHER TOKEN ERROR";
-        }
-
-        HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("status", 401);
-        jsonMap.put("code", "9999");
-        jsonMap.put("message", resultMsg);
-        jsonMap.put("reason", e.getMessage());
-        JSONObject jsonObject = new JSONObject(jsonMap);
-        logger.error(resultMsg, e);
-        return jsonObject;
     }
 }

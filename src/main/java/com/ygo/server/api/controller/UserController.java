@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -27,11 +29,11 @@ public class UserController {
         return ResponseEntity.ok().body("생성 가능한 아이디입니다.");
     }
     //POST
-    @RequestMapping(value = "/login", method = RequestMethod.POST) // 상태 변경이 없지만, 예외적으로 POST
+    @RequestMapping(value = "/login", method = RequestMethod.POST) // 상태 변경이 없지만, 암호화를 위해 POST
     public ResponseEntity<Object> login(@RequestBody UserVO userVo) {
         UserVO user = userService.getMatchedUser(userVo);
         if (user == null) {
-            return ResponseEntity.status(403).body("일치하는 정보가 존재하지 않습니다.");
+            return ResponseEntity.badRequest().body("일치하는 정보가 존재하지 않습니다.");
         }
 
         TokenVO result = TokenVO.builder()
@@ -41,6 +43,31 @@ public class UserController {
                 .refreshToken(TokenUtils.generateRefreshToken(user))
                 .build();
         return ResponseEntity.ok().body(result);
+    }
+
+    @RequestMapping(value = "/refresh", method = RequestMethod.POST) // 상태 변경이 없지만, 암호화를 위해 POST
+    public ResponseEntity<Object> refresh(HttpServletRequest request, @RequestBody UserVO userVo) {
+        UserVO user = userService.getMatchedUserById(userVo);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("일치하는 정보가 존재하지 않습니다.");
+        }
+
+        String header = request.getHeader(AuthConstants.AUTH_HEADER);
+        String token = TokenUtils.getTokenFromHeader(header);
+        String userId = TokenUtils.getUserIdFromToken(token);
+
+        if (userId.equals(user.getUserId())) {
+            TokenVO result = TokenVO.builder()
+                    .grantType(AuthConstants.TOKEN_TYPE)
+                    .auth(user.getUserAuth())
+                    .accessToken(TokenUtils.generateAccessToken(user))
+                    .refreshToken(TokenUtils.generateRefreshToken(user))
+                    .build();
+
+            return ResponseEntity.ok().body(result);
+        } else {
+            return ResponseEntity.badRequest().body("일치하는 정보가 존재하지 않습니다.");
+        }
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)

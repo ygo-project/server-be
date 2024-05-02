@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface UserService {
     boolean isExistID(String id);
     UserVO getMatchedUser(UserVO reqVo);
+    UserVO getMatchedUserById(UserVO reqVo);
     Optional<UserVO> login(UserVO reqVo);
     boolean signUp(UserVO reqVo);
 }

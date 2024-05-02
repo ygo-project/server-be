@@ -28,6 +28,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserVO getMatchedUserById(UserVO reqVo) {
+        Optional<UserVO> selected = userDAO.selectUserByID(reqVo);
+        return selected.orElse(null);
+    }
+
+    @Override
     public Optional<UserVO> login(UserVO reqVo) {
         return userDAO.selectUserByID(reqVo);
     }
