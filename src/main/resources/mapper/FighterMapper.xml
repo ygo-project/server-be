@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ygo.server.api.service.dao.FighterDAO">
+
+    <select id="selectFighterListByUser" parameterType="map" resultType="fighter">
+        SELECT
+            user_id,
+            name,
+            status
+        FROM fighter
+    </select>
+
+    <insert id="insertFighter" parameterType="fighter">
+        INSERT INTO fighter
+        ( user_id, name )
+        VALUES
+        ( #{userId}, #{name} )
+    </insert>
+
+    <update id="updateFighter" parameterType="fighter">
+        UPDATE fighter
+        SET status = #{status}
+        WHERE user_id = #{userId}
+          AND name = #{name}
+    </update>
+
+</mapper>

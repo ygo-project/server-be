@@ -17,6 +17,7 @@
         <typeAlias type="java.util.HashMap" alias="hashMap" />
 
         <typeAlias type="com.ygo.server.api.service.vo.UserVO" alias="user" />
+        <typeAlias type="com.ygo.server.api.service.vo.FighterVO" alias="fighter" />
     </typeAliases>
 
 </configuration>
