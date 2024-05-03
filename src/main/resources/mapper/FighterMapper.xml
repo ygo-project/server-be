@@ -10,6 +10,10 @@
             name,
             status
         FROM fighter
+        WHERE user_id = #{userId}
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
     </select>
 
     <insert id="insertFighter" parameterType="fighter">

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ygo.server.api.service.dao.DeckDAO">
+
+    <select id="selectDeckListAll" resultType="deck">
+        SELECT
+            d.seq,
+            d.name,
+            d.nickname,
+            c.code_desc as nation
+        FROM deck d, common_code c
+        WHERE d.nation = c.code
+    </select>
+
+</mapper>

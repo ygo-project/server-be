@@ -18,6 +18,7 @@
 
         <typeAlias type="com.ygo.server.api.service.vo.UserVO" alias="user" />
         <typeAlias type="com.ygo.server.api.service.vo.FighterVO" alias="fighter" />
+        <typeAlias type="com.ygo.server.api.service.vo.DeckVO" alias="deck" />
     </typeAliases>
 
 </configuration>

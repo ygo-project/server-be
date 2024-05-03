@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,23 @@ public class FighterController {
         if (fighterList != null && !fighterList.isEmpty()) {
             return ResponseEntity.ok().body(fighterList);
         } else {
-            return ResponseEntity.ok().body("nodata");
+            return ResponseEntity.ok().body(null);
+        }
+    }
+
+    @RequestMapping(value = "/validList/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<Object> validList (@PathVariable("userId") String userId) {
+        if (userId == null || userId.isEmpty()) return ResponseEntity.badRequest().body("아이디는 필수 입력 값입니다.");
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("userId", userId);
+        paramMap.put("status", "A");
+        List<FighterVO> fighterList = fighterService.getFighterByUser(paramMap);
+
+        if (fighterList != null && !fighterList.isEmpty()) {
+            return ResponseEntity.ok().body(fighterList);
+        } else {
+            return ResponseEntity.ok().body(null);
         }
     }
 
