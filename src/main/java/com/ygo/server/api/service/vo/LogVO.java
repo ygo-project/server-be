@@ -1,0 +1,42 @@
+package com.ygo.server.api.service.vo;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class LogVO {
+    Long seq;
+    Long leagueSeq;
+    Long fighterSeq;
+    Long deckSeq;
+    Long opponentFighterSeq;
+    Long opponentDeckSeq;
+    String result;
+
+    public boolean isValid() {
+        if (leagueSeq == null) return false;
+        if (fighterSeq == null) return false;
+        if (deckSeq == null) return false;
+        if (opponentFighterSeq == null) return false;
+        if (opponentDeckSeq == null) return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "LogVO{" +
+                "seq=" + seq +
+                ", leagueSeq=" + leagueSeq +
+                ", fighterSeq='" + fighterSeq + '\'' +
+                ", deckSeq=" + deckSeq +
+                ", opponentFighterSeq='" + opponentFighterSeq + '\'' +
+                ", opponentDeckSeq=" + opponentDeckSeq +
+                ", result='" + result + '\'' +
+                '}';
+    }
+}
