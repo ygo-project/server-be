@@ -16,6 +16,7 @@ public class LogVO {
     Long deckSeq;
     Long opponentFighterSeq;
     Long opponentDeckSeq;
+    String round;
     String result;
 
     public boolean isValid() {
@@ -24,6 +25,8 @@ public class LogVO {
         if (deckSeq == null) return false;
         if (opponentFighterSeq == null) return false;
         if (opponentDeckSeq == null) return false;
+        if (round == null || round.isEmpty()) return false;
+        if (result == null || result.isEmpty()) return false;
         return true;
     }
 
@@ -32,10 +35,11 @@ public class LogVO {
         return "LogVO{" +
                 "seq=" + seq +
                 ", leagueSeq=" + leagueSeq +
-                ", fighterSeq='" + fighterSeq + '\'' +
+                ", fighterSeq=" + fighterSeq +
                 ", deckSeq=" + deckSeq +
-                ", opponentFighterSeq='" + opponentFighterSeq + '\'' +
+                ", opponentFighterSeq=" + opponentFighterSeq +
                 ", opponentDeckSeq=" + opponentDeckSeq +
+                ", round='" + round + '\'' +
                 ", result='" + result + '\'' +
                 '}';
     }

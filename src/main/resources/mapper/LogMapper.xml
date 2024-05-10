@@ -6,10 +6,10 @@
 
     <insert id="insertLogList" parameterType="map">
         INSERT INTO log
-        (league_seq, fighter_seq, deck_seq, opponent_fighter_seq, opponent_deck_seq, result)
+        (league_seq, fighter_seq, deck_seq, opponent_fighter_seq, opponent_deck_seq, round, result)
         values
         <foreach item="item" collection="logList" separator=",">
-            ( #{item.leagueSeq}, #{item.fighterSeq}, #{item.deckSeq}, #{item.opponentFighterSeq}, #{item.opponentDeckSeq}, #{item.result} )
+            ( #{item.leagueSeq}, #{item.fighterSeq}, #{item.deckSeq}, #{item.opponentFighterSeq}, #{item.opponentDeckSeq}, #{item.round}, #{item.result} )
         </foreach>
     </insert>
 
