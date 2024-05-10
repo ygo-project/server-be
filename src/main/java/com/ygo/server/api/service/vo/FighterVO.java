@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FighterVO {
+    private Long seq;
     private String userId;
     private String name;
     private String status;
 
     public boolean isValid() {
-        if (userId == null || userId.isEmpty()) return false;
-        if (name == null || name.isEmpty()) return false;
+        if (seq == null || seq.equals(0L)) return false;
         return true;
     }
 

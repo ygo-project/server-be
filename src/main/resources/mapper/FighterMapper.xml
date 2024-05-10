@@ -6,6 +6,7 @@
 
     <select id="selectFighterListByUser" parameterType="map" resultType="fighter">
         SELECT
+            seq,
             user_id,
             name,
             status
@@ -26,8 +27,7 @@
     <update id="updateFighter" parameterType="fighter">
         UPDATE fighter
         SET status = #{status}
-        WHERE user_id = #{userId}
-          AND name = #{name}
+        WHERE seq = #{seq}
     </update>
 
 </mapper>

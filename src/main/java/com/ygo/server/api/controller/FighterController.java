@@ -67,7 +67,7 @@ public class FighterController {
     // PATCH
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
     public ResponseEntity<Object> update(@RequestBody FighterVO fighterVO) {
-        if (!fighterVO.isValid()) return ResponseEntity.badRequest().body("아이디와 이름은 필수 입력 값입니다.");
+        if (!fighterVO.isValid()) return ResponseEntity.badRequest().body("시퀀스는 필수 입력 값입니다.");
 
         boolean isUpdateDone = fighterService.updateFighter(fighterVO);
 
