@@ -5,12 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class LogVO {
     Long seq;
+    Date regDate;
     Long leagueSeq;
     Long fighterSeq;
     Long deckSeq;
@@ -18,6 +21,7 @@ public class LogVO {
     Long opponentDeckSeq;
     String round;
     String result;
+    String chkYn;
 
     public boolean isValid() {
         if (leagueSeq == null) return false;
@@ -34,6 +38,7 @@ public class LogVO {
     public String toString() {
         return "LogVO{" +
                 "seq=" + seq +
+                ", regDate=" + regDate +
                 ", leagueSeq=" + leagueSeq +
                 ", fighterSeq=" + fighterSeq +
                 ", deckSeq=" + deckSeq +
@@ -41,6 +46,7 @@ public class LogVO {
                 ", opponentDeckSeq=" + opponentDeckSeq +
                 ", round='" + round + '\'' +
                 ", result='" + result + '\'' +
+                ", chkYn='" + chkYn + '\'' +
                 '}';
     }
 }

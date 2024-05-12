@@ -21,6 +21,7 @@
         <typeAlias type="com.ygo.server.api.service.vo.FighterVO" alias="fighter" />
         <typeAlias type="com.ygo.server.api.service.vo.DeckVO" alias="deck" />
         <typeAlias type="com.ygo.server.api.service.vo.LeagueVO" alias="league" />
+        <typeAlias type="com.ygo.server.api.service.vo.LogVO" alias="log" />
     </typeAliases>
 
 </configuration>

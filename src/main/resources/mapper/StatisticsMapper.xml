@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ygo.server.api.service.dao.StatisticsDAO">
+
+    <insert id="insertStatisticsList" parameterType="map">
+        INSERT INTO statistics
+        (reg_date, fighter_seq, deck_seq, win, lose)
+        VALUES
+        <foreach item="item" collection="statisticsList" separator=",">
+            ( #{item.regDate}, #{item.fighterSeq}, #{item.deckSeq}, #{item.win}, #{item.lose} )
+        </foreach>
+    </insert>
+
+</mapper>
