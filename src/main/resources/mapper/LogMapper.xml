@@ -4,6 +4,22 @@
 
 <mapper namespace="com.ygo.server.api.service.dao.LogDAO">
 
+    <select id="selectRecentChampion" resultType="customLeague">
+        SELECT
+            lo.reg_date,
+            le.name AS league,
+            d.name AS deck,
+            f.name AS fighter
+        FROM log lo, league le, deck d, fighter f
+        WHERE lo.league_seq = le.seq
+          AND lo.fighter_seq = f.seq
+          AND lo.deck_seq = d.seq
+          AND lo.round = 'T_0'
+          AND result = '1'
+        ORDER BY lo.reg_date DESC
+        LIMIT 5
+    </select>
+
     <select id="selectNeedChkLogList" resultType="log">
         SELECT
             seq,

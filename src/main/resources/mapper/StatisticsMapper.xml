@@ -4,6 +4,32 @@
 
 <mapper namespace="com.ygo.server.api.service.dao.StatisticsDAO">
 
+    <select id="selectStatisticsGroupByNation" resultType="customStatistics">
+        SELECT
+            code_desc AS name,
+            SUM(win) AS win,
+            SUM(lose) AS lose,
+            SUM(win) / (SUM(win) + SUM(lose)) AS rate
+        FROM statistics s, deck d, common_code c
+        WHERE s.deck_seq = d.seq
+          AND d.nation = c.code
+        GROUP BY nation
+        ORDER BY rate DESC, win DESC
+    </select>
+
+    <select id="selectStatisticsGroupByDeck" resultType="customStatistics">
+        SELECT
+            d.name AS name,
+            SUM(win) AS win,
+            SUM(lose) AS lose,
+            SUM(win) / (SUM(win) + SUM(lose)) AS rate
+        FROM statistics s, deck d
+        WHERE s.deck_seq = d.seq
+        GROUP BY s.deck_seq
+        ORDER BY rate DESC, win DESC
+        LIMIT 10
+    </select>
+
     <insert id="insertStatisticsList" parameterType="map">
         INSERT INTO statistics
         (reg_date, fighter_seq, deck_seq, win, lose)

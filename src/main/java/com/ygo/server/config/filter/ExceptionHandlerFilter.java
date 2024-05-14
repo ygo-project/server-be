@@ -2,6 +2,7 @@ package com.ygo.server.config.filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ygo.server.config.exception.BusinessExceptionHandler;
 import com.ygo.server.config.exception.TokenNotValidateException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (TokenNotValidateException e) {
+        } catch (TokenNotValidateException | BusinessExceptionHandler e) {
             setErrorResponse(HttpStatus.FORBIDDEN, response, e);
             return;
         }

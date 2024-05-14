@@ -1,5 +1,6 @@
 package com.ygo.server.api.service.dao;
 
+import com.ygo.server.api.service.vo.CustomLeagueVO;
 import com.ygo.server.api.service.vo.LogVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 public interface LogDAO {
     //SELECT
     List<LogVO> selectNeedChkLogList();
+    List<CustomLeagueVO> selectRecentChampion();
     //INSERT
     int insertLogList(Map<String, Object> reqParam);
     //UPDATE

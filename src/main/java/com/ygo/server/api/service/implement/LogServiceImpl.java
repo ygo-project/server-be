@@ -2,6 +2,7 @@ package com.ygo.server.api.service.implement;
 
 import com.ygo.server.api.service.dao.LogDAO;
 import com.ygo.server.api.service.interfaces.LogService;
+import com.ygo.server.api.service.vo.CustomLeagueVO;
 import com.ygo.server.api.service.vo.LogVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,11 @@ public class LogServiceImpl implements LogService {
     @Override
     public List<LogVO> getNeedChkLogList() {
         return logDAO.selectNeedChkLogList();
+    }
+
+    @Override
+    public List<CustomLeagueVO> getRecentChampion() {
+        return logDAO.selectRecentChampion();
     }
 
     @Override
