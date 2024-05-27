@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomStatisticsVO {
+    private String date;
     private String name;
     private Long win;
     private Long lose;

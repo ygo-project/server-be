@@ -30,6 +30,72 @@
         LIMIT 10
     </select>
 
+    <select id="selectStatisticsListOnDeckPaging" parameterType="map" resultType="customStatistics">
+        SELECT
+            s.reg_date AS date,
+            (SELECT nickname FROM deck WHERE seq = s.deck_seq) AS name,
+            SUM(win) AS win,
+            SUM(lose) AS lose
+        FROM statistics s
+        WHERE reg_date between #{startDate} and #{endDate}
+        <if test="deckSeq != null and deckSeq != '-1'">
+            AND deck_seq = #{deckSeq}
+        </if>
+        GROUP BY s.reg_date, s.deck_seq
+        ORDER BY s.reg_date
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
+    <select id="selectStatisticsListOnDeckPagingCount" parameterType="map" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM (
+            SELECT
+                reg_date,
+                deck_seq
+            FROM statistics s
+            WHERE reg_date between #{startDate} and #{endDate}
+            <if test="deckSeq != null and deckSeq != '-1'">
+                AND deck_seq = #{deckSeq}
+            </if>
+            GROUP BY s.reg_date, s.deck_seq
+        ) a
+    </select>
+
+    <select id="selectStatisticsListOnFighterPaging" parameterType="map" resultType="customStatistics">
+        SELECT
+            s.reg_date AS date,
+            (SELECT name FROM fighter WHERE seq = s.fighter_seq) AS name,
+            SUM(win) AS win,
+            SUM(lose) AS lose
+        FROM statistics s
+        WHERE reg_date between #{startDate} and #{endDate}
+        <if test="fighterSeq != null and fighterSeq != '-1'">
+            AND fighter_seq = #{fighterSeq}
+        </if>
+        GROUP BY s.reg_date, s.fighter_seq
+        ORDER BY s.reg_date
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
+    <select id="selectStatisticsListOnFighterPagingCount" parameterType="map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM (
+            SELECT
+                reg_date,
+                fighter_seq
+            FROM statistics s
+            WHERE reg_date between #{startDate} and #{endDate}
+            <if test="fighterSeq != null and fighterSeq != '-1'">
+                AND fighter_seq = #{fighterSeq}
+            </if>
+            GROUP BY s.reg_date, s.fighter_seq
+        ) a
+    </select>
+
     <insert id="insertStatisticsList" parameterType="map">
         INSERT INTO statistics
         (reg_date, fighter_seq, deck_seq, win, lose)

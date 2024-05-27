@@ -26,6 +26,26 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    public List<CustomStatisticsVO> getStatisticsListOnDeckPaging(Map<String, Object> reqParam) {
+        return statisticsDAO.selectStatisticsListOnDeckPaging(reqParam);
+    }
+
+    @Override
+    public int getStatisticsListOnDeckPagingCount(Map<String, Object> reqParam) {
+        return statisticsDAO.selectStatisticsListOnDeckPagingCount(reqParam);
+    }
+
+    @Override
+    public List<CustomStatisticsVO> getStatisticsListOnFighterPaging(Map<String, Object> reqParam) {
+        return statisticsDAO.selectStatisticsListOnFighterPaging(reqParam);
+    }
+
+    @Override
+    public int getStatisticsListOnFighterPagingCount(Map<String, Object> reqParam) {
+        return statisticsDAO.selectStatisticsListOnFighterPagingCount(reqParam);
+    }
+
+    @Override
     public int insertStatisticsList(Map<String, Object> reqParam) {
         return statisticsDAO.insertStatisticsList(reqParam);
     }
